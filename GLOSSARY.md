@@ -10,4 +10,12 @@
 
 **Expanded Entry**: a Timeline Entry the visitor has clicked open to see its details.
 
-**Tech Tag**: a short technology label on a Timeline Entry (e.g. "Kafka"), visible while the entry is collapsed. There are at most five per entry.
+**Tech Tag**: a short technology label (e.g. "Kafka") on a Timeline Entry, where it's visible while the entry is collapsed, or on a Featured Project. There are at most five per entry or project.
+
+**Highlights Strip**: a row of a few real, verifiable facts about the owner's career, directly under the Intro. Never invented or rounded-up numbers.
+
+**Featured Project**: a card describing one piece of work the owner built (problem, what was done, tech). _Not_ a Timeline Entry: a project can belong to a role but is told by its outcome, not by dates.
+
+**Looking-For Card**: the section stating what kind of role the owner wants next (role, work setup, time zone, availability). Shown only while the owner is looking.
+
+**Contact Section**: the end of the page, with the call to action, contact links, the CV download, and the footer.
