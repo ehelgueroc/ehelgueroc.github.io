@@ -1,0 +1,290 @@
+<!doctype html>
+<!--
+  PROTOTYPE, throwaway. Answers "Settle animation and expand behaviour".
+  Variant C ("Bold") from "Pick the visual direction", with three motion variants via ?variant=A|B|C.
+  Extra toggles: ?reduce=1 (simulate prefers-reduced-motion), ?exclusive=1 (only one Entry open at a time).
+  Switching reloads the page so entrance animations replay.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PROTOTYPE · Animation</title>
+<script>
+  // Mark JS + chosen motion settings before first paint, so hidden-until-revealed never flashes.
+  const P = new URLSearchParams(location.search);
+  const VARIANT = ["A", "B", "C"].includes(P.get("variant")) ? P.get("variant") : "B"; // default = chosen variant
+  const REDUCE = P.get("reduce") === "1" || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const EXCLUSIVE = P.get("exclusive") === "1";
+  document.documentElement.className = `js m${VARIANT}${REDUCE ? " reduce" : ""}`;
+  history.scrollRestoration = "manual";
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  img { display: block; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 2px solid var(--a1); outline-offset: 4px; border-radius: 8px; }
+
+  /* ---------- Variant C look (from the visual-direction prototype) ---------- */
+  .vC { --bg: #f6f7fb; --fg: #14161f; --muted: #5d6275; --card: #fff; --line: #dfe2ec; --a1: #6d4aff; --a2: #00b3d6;
+        background: var(--bg); color: var(--fg); min-height: 100vh; padding: 0 16px 140px;
+        font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .vC { --bg: #0e0f16; --fg: #eef0f8; --muted: #9aa0b8; --card: #171925; --line: #2a2d3d; }
+  }
+  .vC .hero { min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; max-width: 760px; margin: 0 auto; }
+  .vC .avatar { width: 152px; height: 152px; border-radius: 50%; object-fit: cover; padding: 4px;
+                background: linear-gradient(135deg, var(--a1), var(--a2)); display: grid; place-items: center; color: #fff; font-size: 44px; font-weight: 700; }
+  .vC h1 { font-size: clamp(36px, 8vw, 68px); line-height: 1.05; margin: 28px 0 10px; letter-spacing: -0.03em; font-weight: 800; }
+  .vC .title { font-size: clamp(18px, 3vw, 22px); font-weight: 700;
+               background: linear-gradient(90deg, var(--a1), var(--a2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .vC .sub { color: var(--muted); margin-top: 6px; }
+  .vC .summary { color: var(--muted); margin: 24px 0 0; font-size: 17px; }
+  .vC .meta { color: var(--muted); font-size: 14px; margin-top: 16px; }
+  .vC .links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+  .vC .links a { text-decoration: none; color: var(--fg); border: 1px solid var(--line); background: var(--card); padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: 14px; }
+  .vC .links a:first-child { background: linear-gradient(90deg, var(--a1), var(--a2)); color: #fff; border: 0; }
+  .vC h2 { text-align: center; font-size: 32px; letter-spacing: -0.02em; margin: 40px 0 48px; }
+  .vC .tl { position: relative; max-width: 1000px; margin: 0 auto; --p: 1; }
+  .vC .tl::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
+                    transform: translateX(-50%) scaleY(var(--p)); transform-origin: top;
+                    background: linear-gradient(var(--a1), var(--a2)); border-radius: 3px; }
+  .vC .item { position: relative; width: 50%; padding: 0 40px 40px 0; }
+  .vC .item:nth-child(even) { margin-left: 50%; padding: 0 0 40px 40px; }
+  .vC .item::after { content: ""; position: absolute; top: 22px; right: -9px; width: 18px; height: 18px; border-radius: 50%;
+                     background: var(--bg); border: 3px solid var(--a1); }
+  .vC .item:nth-child(even)::after { left: -9px; right: auto; }
+  .vC .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; box-shadow: 0 8px 28px rgba(20,22,40,.06); }
+  .vC .years { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: linear-gradient(90deg, var(--a1), var(--a2)); padding: 3px 10px; border-radius: 999px; }
+  .vC .role { font-size: 19px; font-weight: 750; margin-top: 10px; line-height: 1.3; }
+  .vC .role .at { display: block; font-size: 15px; font-weight: 500; color: var(--muted); }
+  .vC .one { color: var(--muted); margin: 8px 0 12px; font-size: 15px; }
+  .vC .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .vC .tag { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: color-mix(in srgb, var(--a1) 14%, transparent); color: var(--a1); }
+  .vC summary .more { display: inline-block; margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--a1); }
+  .vC summary .more::after { content: " ▼"; font-size: 10px; display: inline-block; }
+  .vC details[open] summary .more::after { transform: rotate(180deg); }
+  .vC .detail { overflow: hidden; }
+  .vC .detail-inner { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 15px; }
+  .vC .detail .loc { color: var(--muted); font-size: 13px; }
+  .vC .detail ul { padding-left: 18px; margin: 8px 0 0; }
+  @media (max-width: 760px) {
+    .vC .tl::before { left: 8px; transform: scaleY(var(--p)); }
+    .vC .item, .vC .item:nth-child(even) { width: 100%; margin-left: 0; padding: 0 0 28px 36px; }
+    .vC .item::after, .vC .item:nth-child(even)::after { left: 0; right: auto; }
+  }
+
+  /* ---------- Motion A: Gentle (hero stagger, cards fade-up, instant expand + content fade) ---------- */
+  .mA .hero > * { animation: fadeUp 450ms cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 70ms); }
+  .mA .item { opacity: 0; transform: translateY(16px); transition: opacity 400ms ease-out, transform 400ms cubic-bezier(.2,.7,.2,1); }
+  .mA .item.in { opacity: 1; transform: none; }
+  .mA details[open] .detail-inner { animation: fade 200ms ease-out; }
+
+  /* ---------- Motion B: Expressive (photo pop, line draws, cards slide from their side, dots pop, smooth expand) ---------- */
+  .mB .hero .avatar { animation: pop 500ms cubic-bezier(.3,1.4,.5,1) both; }
+  .mB .hero > :not(.avatar) { animation: fadeUp 450ms cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(150ms + var(--i) * 60ms); }
+  .mB .tl { --p: 0; }
+  .mB .item { opacity: 0; transform: translateX(-28px); transition: opacity 350ms ease-out, transform 350ms cubic-bezier(.2,.7,.2,1); }
+  .mB .item:nth-child(even) { transform: translateX(28px); }
+  .mB .item::after { transform: scale(0); transition: transform 250ms cubic-bezier(.3,1.6,.5,1) 120ms; }
+  .mB .item.in { opacity: 1; transform: none; }
+  .mB .item.in::after { transform: scale(1); }
+  .mB summary .more::after { transition: transform 250ms ease; }
+  @media (max-width: 760px) { .mB .item:nth-child(even) { transform: translateX(-28px); } .mB .item.in:nth-child(even) { transform: none; } }
+
+  /* ---------- Motion C: Calm (no entrance motion at all; hover lift + smooth expand only) ---------- */
+  .mC .card { transition: transform 180ms ease, box-shadow 180ms ease; }
+  .mC .card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(20,22,40,.12); }
+  .mC summary .more::after { transition: transform 200ms ease; }
+
+  /* ---------- Reduced motion: everything visible, nothing moves ---------- */
+  .reduce *, .reduce *::before, .reduce *::after { animation: none !important; transition: none !important; }
+  .reduce .item, .reduce .item::after { opacity: 1 !important; transform: none !important; }
+  .reduce .tl { --p: 1 !important; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Prototype controls (not part of the design) ---------- */
+  .proto-bar {
+    position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 1000;
+    display: flex; align-items: center; gap: 4px; padding: 6px; flex-wrap: wrap; justify-content: center;
+    background: #ff2d87; color: #fff; border-radius: 22px; max-width: calc(100vw - 32px);
+    font: 600 13px/1 system-ui, sans-serif; box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  }
+  .proto-bar button {
+    all: unset; cursor: pointer; height: 32px; min-width: 32px; padding: 0 10px; border-radius: 999px;
+    display: grid; place-items: center; background: rgba(255,255,255,.18); white-space: nowrap;
+  }
+  .proto-bar button:hover { background: rgba(255,255,255,.32); }
+  .proto-bar button[aria-pressed="true"] { background: #fff; color: #ff2d87; }
+  .proto-bar #label { padding: 0 10px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="proto-bar" aria-label="Prototype controls">
+  <button id="prev" aria-label="Previous variant">←</button>
+  <span id="label"></span>
+  <button id="next" aria-label="Next variant">→</button>
+  <button id="reduce">Reduced motion</button>
+  <button id="exclusive">One open at a time</button>
+  <button id="replay">Replay ↻</button>
+</nav>
+<script>
+// ---------- Content (copied from content/intro.md + content/timeline.md) ----------
+const intro = {
+  name: "Esteban Helguero Cardiff",
+  title: "Senior Backend Engineer",
+  sub: "Node.js · TypeScript · AWS · Platform & DevOps tooling",
+  summary: "Backend engineer with 15+ years of experience, these days building Node.js and TypeScript services on AWS. Lately I've moved into platform work: automating dependency updates across 40 repositories, building shared CI pipes, and bringing Kafka and Schema Registry to teams with Confluent and Terraform. What I enjoy most is making other developers' lives easier: fewer manual steps, fewer deploy surprises, and tools people actually want to use.",
+  meta: "Gran Canaria, Spain · Remote &nbsp;·&nbsp; Spanish (native) · English (professional) · German (basic)",
+  links: [["LinkedIn", "https://www.linkedin.com/in/ehelguero"], ["GitHub", "https://github.com/ehelgueroc"], ["Email", "mailto:e.helguero.c@gmail.com"]],
+  photo: "../content/photo.jpg",
+};
+const entries = [
+  { years: "2023 – Present", title: "Senior Node.js Backend Developer", company: "rindus",
+    summary: "Backend services and platform tooling for C&A, on the rindus team.",
+    tags: ["TypeScript", "NestJS", "AWS", "Terraform", "Kafka"], location: "Gran Canaria, Spain (remote)",
+    bullets: [
+      "Build NestJS/TypeScript services on PostgreSQL and DynamoDB, deployed to AWS (ECS, Fargate, S3) with Terraform and monitored in Datadog.",
+      "Own the internal Renovate setup: a scheduled pipeline that keeps dependencies up to date across 40 repositories and several teams, with Dependency-Track used to make sure vulnerable dependencies keep going down.",
+      "Built shared Bitbucket pipes for AI-assisted code review, SonarQube and Renovate, so teams can adopt them without setting anything up from scratch.",
+      "Building a Kafka Schema Registry and supporting developers who manage Confluent resources with Terraform.",
+      "Run the monthly DevOps Talk Show, where the team presents what it has shipped, including my own pipes and Terraform templates.",
+    ] },
+  { years: "2022 – 2023", title: "Fullstack Node.js Developer", company: "Secret Source",
+    summary: "Full-stack TypeScript work for a UK client.",
+    tags: ["TypeScript", "React", "Node.js", "Express", "MySQL"], location: "Las Palmas de Gran Canaria, Spain",
+    bullets: [
+      "Built frontend features in React and TypeScript with Redux Toolkit and Styled Components, and documented components in Storybook.",
+      "Wrote backend APIs in Express and TypeScript on MySQL, including stored procedures.",
+      "Integrated Auth0 for authentication and the Squidex headless CMS.",
+    ] },
+  { years: "2017 – 2022", title: "Senior Developer", company: "redk – The CRM solutions company",
+    summary: "CRM integrations and AWS serverless backends.",
+    tags: ["AWS Lambda", "Node.js", "PHP", "SugarCRM", "Zendesk"], location: "Madrid, Spain",
+    bullets: [
+      "Built serverless backends on AWS Lambda, API Gateway and DynamoDB, plus Node.js services.",
+      "Certified SugarCRM Developer Specialist: full-stack work on SugarCRM v6–v8 (PHP, JavaScript, MySQL, Talend, PHPUnit).",
+      "Zendesk Certified Developer: third-party integrations and Help Center frontend development.",
+      "Served as Scrum Master for the team.",
+    ] },
+  { years: "2016 – 2017", title: "Fullstack Developer", company: "Coolcan Ideas Canarias",
+    summary: "Full-stack web application development.",
+    tags: ["PHP", "CodeIgniter", "MySQL", "JavaScript"], location: "Las Palmas, Spain",
+    bullets: ["Built web applications end to end: PHP/CodeIgniter and MySQL on the backend, HTML, CSS and JavaScript on the frontend."] },
+  { years: "2015 – 2016", title: "Senior Web Application Developer", company: "Open Canarias",
+    summary: "Features and performance work on travel and activities web apps.",
+    tags: ["PHP", "CodeIgniter", "MySQL", "JavaScript"], location: "Las Palmas, Spain",
+    bullets: [
+      "Developed features and fixed bugs on a hotel room comparison app, and sped up its hotel-data scraping in the first months.",
+      "Built features for a multi-tenant activities app and made the whole app responsive.",
+    ] },
+  { years: "2005 – 2015", title: "Early career", company: "Web developer & IT technician",
+    summary: "Ten years of web development and IT operations in the Canary Islands, much of it at Fuerteventura Airport.",
+    tags: ["PHP", "HTML/CSS", "JavaScript", "SharePoint"], location: "Fuerteventura & Gran Canaria, Spain",
+    bullets: [
+      "Designed, built and coded web applications in PHP, HTML5 and CSS3 (SPI Fuerteventura, Samtec, Destinum Networks).",
+      "Developed and maintained internal web apps for Fuerteventura Airport departments in PHP and SharePoint, and kept servers, backups and workstations running, including 24-hour on-call support (Bull, Indra, INERZA).",
+      "Started out building a client-management application and maintaining IT systems for the Fuerteventura business confederation.",
+    ] },
+];
+
+// ---------- Render (native <details>: keyboard + screen reader for free) ----------
+const heroParts = [
+  `<img class="avatar" src="${intro.photo}" alt="${intro.name}" onerror="this.outerHTML='<div class=&quot;avatar&quot;>EH</div>'">`,
+  `<h1>${intro.name}</h1>`, `<div class="title">${intro.title}</div>`, `<div class="sub">${intro.sub}</div>`,
+  `<p class="summary">${intro.summary}</p>`, `<div class="meta">${intro.meta}</div>`,
+  `<div class="links">${intro.links.map(([t, h]) => `<a href="${h}" target="_blank" rel="noopener">${t}</a>`).join("")}</div>`,
+];
+document.getElementById("app").innerHTML = `
+  <div class="vC">
+    <section class="hero">${heroParts.map((h, i) => h.replace(/^<(\w+)/, `<$1 style="--i:${i}"`)).join("")}</section>
+    <h2>Career</h2>
+    <div class="tl">${entries.map((e) => `
+      <div class="item"><div class="card"><details${EXCLUSIVE && (VARIANT === "A" || REDUCE) ? ' name="timeline"' : ""}><summary>
+        <span class="years">${e.years}</span>
+        <div class="role">${e.title}<span class="at">${e.company}</span></div>
+        <div class="one">${e.summary}</div>
+        <div class="tags">${e.tags.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+        <span class="more">Details</span>
+      </summary><div class="detail"><div class="detail-inner"><div class="loc">${e.location}</div>
+        <ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul></div></div></details></div></div>`).join("")}
+    </div>
+  </div>`;
+
+// ---------- Scroll reveal (motion A + B): IntersectionObserver, reveal once ----------
+if (!REDUCE && VARIANT !== "C") {
+  const io = new IntersectionObserver((list) => list.forEach((en) => {
+    if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+  }), { rootMargin: "0px 0px -12% 0px", threshold: 0.1 });
+  document.querySelectorAll(".item").forEach((el) => io.observe(el));
+}
+
+// ---------- Centre line draws with scroll progress (motion B) ----------
+if (!REDUCE && VARIANT === "B") {
+  const tl = document.querySelector(".tl");
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const r = tl.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (innerHeight * 0.75 - r.top) / r.height));
+    tl.style.setProperty("--p", p.toFixed(3));
+  };
+  addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+}
+
+// ---------- Smooth height expand/collapse (motion B + C), Web Animations API ----------
+if (!REDUCE && VARIANT !== "A") {
+  const DURATION = VARIANT === "B" ? 260 : 220;
+  const animate = (details, open) => {
+    const body = details.querySelector(".detail");
+    if (open) details.open = true;
+    const full = body.scrollHeight;
+    const anim = body.animate(
+      [{ height: open ? "0px" : full + "px", opacity: open ? 0 : 1 }, { height: open ? full + "px" : "0px", opacity: open ? 1 : 0 }],
+      { duration: DURATION, easing: "cubic-bezier(.2,.7,.2,1)" });
+    anim.onfinish = () => { if (!open) details.open = false; };
+  };
+  document.querySelectorAll("details").forEach((d) => {
+    d.querySelector("summary").addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const opening = !d.open;
+      if (opening && EXCLUSIVE) document.querySelectorAll("details[open]").forEach((o) => o !== d && animate(o, false));
+      animate(d, opening);
+    });
+  });
+}
+
+// ---------- Prototype controls ----------
+const names = { A: "Gentle", B: "Expressive", C: "Calm" };
+const keys = Object.keys(names);
+document.getElementById("label").textContent = `${VARIANT} (${names[VARIANT]})`;
+const go = (changes) => {
+  const u = new URL(location.href);
+  for (const [k, v] of Object.entries(changes)) v ? u.searchParams.set(k, v) : u.searchParams.delete(k);
+  scrollTo(0, 0);
+  location.replace(u);
+};
+const step = (d) => go({ variant: keys[(keys.indexOf(VARIANT) + d + keys.length) % keys.length] });
+const reduceBtn = document.getElementById("reduce"), exclBtn = document.getElementById("exclusive");
+reduceBtn.setAttribute("aria-pressed", P.get("reduce") === "1");
+exclBtn.setAttribute("aria-pressed", EXCLUSIVE);
+document.getElementById("prev").onclick = () => step(-1);
+document.getElementById("next").onclick = () => step(1);
+reduceBtn.onclick = () => go({ reduce: P.get("reduce") === "1" ? null : "1" });
+exclBtn.onclick = () => go({ exclusive: EXCLUSIVE ? null : "1" });
+document.getElementById("replay").onclick = () => go({});
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input, textarea, [contenteditable]")) return;
+  if (e.key === "ArrowLeft") step(-1);
+  if (e.key === "ArrowRight") step(1);
+});
+</script>
+</body>
+</html>
