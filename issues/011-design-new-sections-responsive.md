@@ -10,7 +10,7 @@ blocked_by: []
 
 ## Question
 
-The ideas canvas (https://claude.ai/artifact/K4Q1uykmnXtJQouQL7tUJQ) shows the Highlights Strip, Featured Projects, Looking-For Card and Contact Section only on desktop in dark mode, with draft copy. Using the approved copy in `content/new-sections.md`, prototype them within the Variant C look and settle:
+The ideas canvas (https://claude.ai/artifact/K4Q1uykmnXtJQouQL7tUJQ) shows the Highlights Strip, Featured Projects, Looking-For Card and Contact Section only on desktop in dark mode, with draft copy. Using the approved copy in `src/content/` and the provisional styles the build gave these sections, prototype them within the Variant C look and settle:
 
 - their light-mode colours (reusing the tokens from **Pick the visual direction**)
 - how each reflows at phone width (4 highlights → 2×2? 3 project cards → stacked?)

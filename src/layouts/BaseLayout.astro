@@ -1,0 +1,35 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Runs before first paint: marks JS as available (enables scroll reveal) and applies a theme the
+         visitor picked earlier. Without a stored choice the OS setting applies via CSS. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          var theme = localStorage.getItem("theme");
+          if (theme === "light" || theme === "dark") root.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,32 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Hero from "../components/Hero.astro";
+import HighlightsStrip from "../components/HighlightsStrip.astro";
+import Timeline from "../components/Timeline.astro";
+import FeaturedProjects from "../components/FeaturedProjects.astro";
+import LookingFor from "../components/LookingFor.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+
+// Provisional <title> and description; "Define the page metadata" settles the final <head>.
+const title = `${intro.data.name} · ${intro.data.title}`;
+const description = `${intro.data.title}. ${intro.data.subline}.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <ThemeToggle />
+  <Hero />
+  <main>
+    <HighlightsStrip />
+    <Timeline />
+    <FeaturedProjects />
+    <LookingFor />
+    <Contact />
+  </main>
+  <Footer />
+</BaseLayout>

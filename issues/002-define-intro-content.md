@@ -20,11 +20,11 @@ What does the Intro say and link to? Decide:
 
 ## Resolution
 
-The final Intro content is in [`content/intro.md`](../content/intro.md).
+The final Intro content is in [`src/content/intro.md`](../src/content/intro.md). It was drafted as `content/intro.md`, which was removed after migration.
 
 - **Headline**: split into the title "Senior Backend Engineer" and the subline "Node.js · TypeScript · AWS · Platform & DevOps tooling".
 - **Summary**: three sentences condensed from the LinkedIn summary, framed as "15+ years". The Timeline still starts in 2005; "15+" avoids any conflict with it.
-- **Photo**: the LinkedIn profile picture, saved as `content/photo.jpg` (square, ≥400×400). **The owner still has to add the file**, and the build needs it.
+- **Photo**: the LinkedIn profile picture, saved as `src/assets/photo.jpg` (any of jpg/jpeg/png/webp works) (square, ≥400×400). **The owner still has to add the file**, and the build needs it.
 - **Links**: LinkedIn, GitHub (`ehelgueroc`), and email as a plain `mailto:` with no obfuscation. flavors.me (defunct), Flickr and Domestika are dropped. Phone and address stay off the page.
 - **Location**: "Gran Canaria, Spain · Remote". **Languages**: Spanish (native), English (professional), German (basic).
 - **Education**: off the page entirely, in both the Intro and the Timeline.

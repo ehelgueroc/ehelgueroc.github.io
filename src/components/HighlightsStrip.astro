@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+
+const highlights = (await getCollection("highlights")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+if (highlights.length > 4)
+  throw new Error(
+    "The Highlights Strip holds at most 4 facts (src/content/highlights.json)",
+  );
+---
+
+<section class="highlights" aria-labelledby="highlights-title">
+  <h2 id="highlights-title" class="visually-hidden">
+    Highlights
+  </h2>
+  <ul>
+    {highlights.map(({ data }) => (
+      <li class="card">
+        <span class="value">{data.value}</span>
+        <span class="label">{data.label}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .highlights {
+    max-width: 1200px;
+    margin: 0 auto 96px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  li {
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .value {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: var(--title-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .label {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* Provisional reflow until "Design the new sections for light mode, mobile and motion" settles it. */
+  @media (max-width: 900px) {
+    ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 420px) {
+    ul {
+      gap: 12px;
+    }
+    li {
+      padding: 20px 16px;
+    }
+  }
+</style>

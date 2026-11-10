@@ -1,0 +1,26 @@
+[
+  {
+    "id": "years",
+    "order": 1,
+    "value": "15+",
+    "label": "years building software, from PHP to TypeScript on AWS"
+  },
+  {
+    "id": "repos",
+    "order": 2,
+    "value": "40",
+    "label": "repositories kept up to date by the Renovate pipeline I run"
+  },
+  {
+    "id": "pipes",
+    "order": 3,
+    "value": "3",
+    "label": "shared CI pipes teams plug in: AI code review, SonarQube, Renovate"
+  },
+  {
+    "id": "talk-show",
+    "order": 4,
+    "value": "Monthly",
+    "label": "the DevOps Talk Show I run for the team"
+  }
+]

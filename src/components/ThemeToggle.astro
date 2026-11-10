@@ -1,0 +1,104 @@
+<button class="theme-toggle" type="button" aria-label="Switch theme">
+  <svg
+    class="moon"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </svg>
+  <svg
+    class="sun"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const current = () =>
+    root.dataset.theme ?? (prefersDark.matches ? "dark" : "light");
+  const label = () => {
+    button?.setAttribute(
+      "aria-label",
+      current() === "dark" ? "Switch to light mode" : "Switch to dark mode",
+    );
+  };
+
+  label();
+  prefersDark.addEventListener("change", label);
+  button?.addEventListener("click", () => {
+    const next = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // Storage blocked: the switch still works for this visit.
+    }
+    label();
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--shadow);
+  }
+
+  /* Without JS the switch can't work, so it isn't shown. */
+  :global(html:not(.js)) .theme-toggle {
+    display: none;
+  }
+
+  /* Moon in light mode, sun in dark mode. */
+  .sun {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .sun {
+    display: block;
+  }
+  :global(:root[data-theme="dark"]) .moon {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .sun {
+      display: block;
+    }
+    :global(:root:not([data-theme="light"])) .moon {
+      display: none;
+    }
+  }
+</style>

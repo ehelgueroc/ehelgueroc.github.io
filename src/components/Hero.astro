@@ -1,0 +1,163 @@
+---
+import { Image } from "astro:assets";
+import { getEntry, render } from "astro:content";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+const { Content: Summary } = await render(intro);
+const { name, title, subline, location, languages, links } = intro.data;
+
+// The photo is optional until the owner adds src/assets/photo.(jpg|jpeg|png|webp); initials show meanwhile.
+const photos = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/photo.{jpg,jpeg,png,webp}",
+  { eager: true },
+);
+const photo = Object.values(photos)[0]?.default;
+const initials = name
+  .split(" ")
+  .slice(0, 2)
+  .map((part) => part[0])
+  .join("");
+---
+
+<header class="hero">
+  <div class="avatar" style="--i: 0">
+    {photo ? (
+      <Image
+        src={photo}
+        alt={name}
+        widths={[152, 304, 456]}
+        sizes="152px"
+        loading="eager"
+        fetchpriority="high"
+      />
+    ) : (
+      <span class="initials" aria-hidden="true">
+        {initials}
+      </span>
+    )}
+  </div>
+  <h1 style="--i: 1">{name}</h1>
+  <p class="title" style="--i: 2">
+    {title}
+  </p>
+  <p class="subline" style="--i: 3">
+    {subline}
+  </p>
+  <div class="summary" style="--i: 4">
+    <Summary />
+  </div>
+  <p class="meta" style="--i: 5">
+    {location} · {languages}
+  </p>
+  <nav class="links" aria-label="Contact" style="--i: 6">
+    {links.map((link, i) => (
+      <a
+        class:list={["button", { "button--primary": i === 0 }]}
+        href={link.href}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 152px;
+    height: 152px;
+    padding: 4px;
+    border-radius: 50%;
+    background: var(--ring-grad);
+  }
+
+  .avatar :global(img),
+  .initials {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    color: var(--accent);
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    margin: 28px 0 10px;
+    font-size: clamp(36px, 8vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 700;
+    background: var(--title-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subline {
+    margin: 6px 0 0;
+    color: var(--muted);
+  }
+
+  .summary {
+    margin-top: 24px;
+    font-size: 17px;
+    color: var(--muted);
+  }
+
+  .summary :global(p) {
+    margin: 0;
+  }
+
+  .meta {
+    margin: 16px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .links {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* Motion B: the photo pops in, then the rest fades up in sequence (issues/005-animation-behaviour.md). */
+  @media (prefers-reduced-motion: no-preference) {
+    .avatar {
+      animation: pop 500ms var(--ease-pop) both;
+    }
+    .hero > :not(.avatar) {
+      animation: fade-up 450ms var(--ease-out) both;
+      animation-delay: calc(150ms + (var(--i) - 1) * 60ms);
+    }
+  }
+</style>

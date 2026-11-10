@@ -1,0 +1,113 @@
+---
+import { getCollection, render } from "astro:content";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const items = await Promise.all(
+  projects.map(async (project) => ({
+    project,
+    Content: (await render(project)).Content,
+  })),
+);
+---
+
+<section class="projects" aria-labelledby="projects-title">
+  <h2 id="projects-title" class="section-title">
+    Things I've built
+  </h2>
+  <p class="intro">Platform tools other developers use every day.</p>
+  <ul class="grid">
+    {items.map(({ project, Content }) => (
+      <li class="card">
+        {project.data.status === "live" ? (
+          <span class="pill pill--grad">In production</span>
+        ) : (
+          <span class="pill pill--outline">In progress</span>
+        )}
+        <h3>{project.data.title}</h3>
+        <p class="problem">{project.data.problem}</p>
+        <div class="body">
+          <Content />
+        </div>
+        <ul class="tags">
+          {project.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .projects {
+    max-width: 1200px;
+    margin: 0 auto 96px;
+  }
+
+  .section-title {
+    margin-bottom: 10px;
+  }
+
+  .intro {
+    margin: 0 0 48px;
+    text-align: center;
+    font-size: 17px;
+    color: var(--muted);
+  }
+
+  .grid {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .grid > li {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .problem {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .body {
+    font-size: 15px;
+  }
+
+  .body :global(ul) {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tags {
+    margin-top: auto;
+  }
+
+  /* Provisional reflow until "Design the new sections for light mode, mobile and motion" settles it. */
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  }
+</style>

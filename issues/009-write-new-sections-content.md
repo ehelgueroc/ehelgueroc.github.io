@@ -20,7 +20,7 @@ What exactly do the Highlights Strip, Featured Projects, Looking-For Card and Co
 
 ## Resolution
 
-The approved copy is in [`content/new-sections.md`](../content/new-sections.md).
+The approved copy is in `src/content/` (`highlights.json`, `projects/`, `looking-for.md`, `contact.md`). It was drafted as `content/new-sections.md`, which was removed after migration.
 
 - **Highlights Strip**: 15+ years · 40 repositories on Renovate · 3 shared CI pipes · Monthly DevOps Talk Show. This replaces the old SugarCRM/Zendesk certifications, which stay in the redk Timeline entry.
 - **Featured Projects**: Dependency updates at scale (In production), Shared CI pipes (In production), Kafka Schema Registry (In progress). Detail stays at LinkedIn's level: no internal system names, nothing beyond "C&A". **No write-up links** until write-ups exist.

@@ -16,6 +16,7 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - Standing preferences: MVP. Be as simple as possible, use a fast page with minimal JS, and keep animations simple and quick. English only.
 - Settled while charting: hosting starts on a free subdomain. There's no separate skills section, because the Timeline carries the tech.
 - **Scope widened on 2026-11-10** at the owner's request. In page order, the sections are: Intro → Highlights Strip → Timeline → Featured Projects → Looking-For Card → Contact Section (with CV download and footer). The ideas canvas, https://claude.ai/artifact/K4Q1uykmnXtJQouQL7tUJQ, shows rough versions of the new sections; its Recommendations board was not chosen. The main design canvas is https://claude.ai/artifact/PN557G9QQeGsAqhmCJyP2J.
+- **Build started early on 2026-11-10**, at the owner's request, on branch `build/astro-site` (Astro 6.4.8, chosen because Astro 7 needs Node ≥ 22.23 and the owner has 22.14). The build already contains every closed decision. Open tickets land as follow-up changes, and the build marks their spots as provisional: the page `<title>`/description, the CV button (hidden until `cvHref` is set), the new sections' mobile reflow and motion, and deploy.
 - Vocabulary: see `GLOSSARY.md`.
 - Skills: grilling tickets use `grilling` + `domain-modeling`, and prototype tickets use `prototype`.
 
@@ -23,12 +24,12 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 
 <!-- one line per closed ticket -->
 
-- [Curate the Timeline content](001-curate-timeline-content.md): six entries, newest first (five roles from 2015 on + one "Early career" Period Entry for 2005–2015). Wording lives in `content/timeline.md`.
-- [Define the Intro content](002-define-intro-content.md): title + subline, a three-sentence "15+ years" summary, LinkedIn photo, LinkedIn/GitHub/email links. No education and no availability badge. Content in `content/intro.md`.
+- [Curate the Timeline content](001-curate-timeline-content.md): six entries, newest first (five roles from 2015 on + one "Early career" Period Entry for 2005–2015). Wording lives in `src/content/timeline/`.
+- [Define the Intro content](002-define-intro-content.md): title + subline, a three-sentence "15+ years" summary, LinkedIn photo, LinkedIn/GitHub/email links. No education and no availability badge. Content in `src/content/intro.md`.
 - [Choose the stack](003-choose-stack.md): static Astro, plain scoped CSS, no animation library, and one Zod-typed Markdown file per Timeline Entry plus a single `intro.md`.
 - [Pick the visual direction](004-visual-direction.md): Variant C "Bold": light/dark following the OS, plus a remembered theme switch, violet→cyan gradient accent, system fonts, centred hero, cards alternating on a centre line.
 - [Settle animation and expand behaviour](005-animation-behaviour.md): motion B "Expressive": photo pop, line draws on scroll, cards slide in from their side once, smooth expand. Several entries open at once, fully static under reduced motion.
-- [Write the content for the new sections](009-write-new-sections-content.md): four highlights (15+, 40, 3, Monthly), three Featured Projects without write-up links, a hideable "Open to conversations" Looking-For Card, and "Let's talk" contact. Copy in `content/new-sections.md`.
+- [Write the content for the new sections](009-write-new-sections-content.md): four highlights (15+, 40, 3, Monthly), three Featured Projects without write-up links, a hideable "Open to conversations" Looking-For Card, and "Let's talk" contact. Copy in `src/content/`.
 
 ## Not yet specified
 

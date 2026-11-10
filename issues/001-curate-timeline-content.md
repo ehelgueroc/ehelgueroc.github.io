@@ -19,7 +19,7 @@ What exactly goes in the Timeline? `Profile.pdf` lists 13 roles (2005 to now). S
 
 ## Resolution
 
-The Timeline has six Timeline Entries, newest first. Full English wording is in [`content/timeline.md`](../content/timeline.md), which the owner approved.
+The Timeline has six Timeline Entries, newest first. Full English wording is in [`src/content/timeline/`](../src/content/timeline/), one file per entry. It was drafted as `content/timeline.md`, which was removed after migration, which the owner approved.
 
 - **Own entries**: rindus (2023–present), Secret Source (2022–2023), redk (2017–2022), Coolcan Ideas (2016–2017), Open Canarias (2015–2016).
 - **One Period Entry**: "Early career", 2005–2015, merging Destinum, INERZA, Indra, SPI Fuerteventura, Samtec, Bull and Confederación de Empresarios. It's grouped on purpose (see `GLOSSARY.md`).
