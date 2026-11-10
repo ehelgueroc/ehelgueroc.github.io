@@ -30,10 +30,11 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - [Pick the visual direction](004-visual-direction.md): Variant C "Bold": light/dark following the OS, plus a remembered theme switch, violet→cyan gradient accent, system fonts, centred hero, cards alternating on a centre line.
 - [Settle animation and expand behaviour](005-animation-behaviour.md): motion B "Expressive": photo pop, line draws on scroll, cards slide in from their side once, smooth expand. Several entries open at once, fully static under reduced motion.
 - [Write the content for the new sections](009-write-new-sections-content.md): four highlights (15+, 40, 3, Monthly), three Featured Projects without write-up links, a hideable "Open to conversations" Looking-For Card, and "Let's talk" contact. Copy in `src/content/`.
+- [Choose the hosting platform](006-choose-hosting.md): GitHub Pages at https://ehelgueroc.github.io from the public repo `ehelgueroc.github.io`, with the Astro GitHub Action deploying every push to `main`.
 
 ## Not yet specified
 
-- **Deploy pipeline details**: how pushes reach the host (CI vs host-native builds), where the repo lives remotely. This becomes specifiable once the stack and host are chosen.
+_Nothing right now. Every remaining question is an open ticket._
 
 ## Out of scope
 
