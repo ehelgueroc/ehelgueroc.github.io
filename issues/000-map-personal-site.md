@@ -25,7 +25,7 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - [Curate the Timeline content](001-curate-timeline-content.md): six entries, newest first (five roles from 2015 on + one "Early career" Period Entry for 2005–2015). Wording lives in `content/timeline.md`.
 - [Define the Intro content](002-define-intro-content.md): title + subline, a three-sentence "15+ years" summary, LinkedIn photo, LinkedIn/GitHub/email links. No education and no availability badge. Content in `content/intro.md`.
 - [Choose the stack](003-choose-stack.md): static Astro, plain scoped CSS, no animation library, and one Zod-typed Markdown file per Timeline Entry plus a single `intro.md`.
-- [Pick the visual direction](004-visual-direction.md): Variant C "Bold": OS-driven light/dark, violet→cyan gradient accent, system fonts, centred hero, cards alternating on a centre line.
+- [Pick the visual direction](004-visual-direction.md): Variant C "Bold": light/dark following the OS, plus a remembered theme switch, violet→cyan gradient accent, system fonts, centred hero, cards alternating on a centre line.
 - [Settle animation and expand behaviour](005-animation-behaviour.md): motion B "Expressive": photo pop, line draws on scroll, cards slide in from their side once, smooth expand. Several entries open at once, fully static under reduced motion.
 
 ## Not yet specified
