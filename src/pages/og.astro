@@ -1,0 +1,99 @@
+---
+// Render-only page: scripts/build-assets.mjs screenshots it at 1200×630 into dist/og.png (the link-preview
+// card, issues/007-define-page-metadata.md) and then deletes it from dist/. Built from intro.md, so the card
+// can't drift from the content.
+import { getEntry } from "astro:content";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-700.css";
+import "@fontsource/inter/latin-800.css";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+const { name, title, subline } = intro.data;
+const initials = name
+  .split(" ")
+  .slice(0, 2)
+  .map((part) => part[0])
+  .join("");
+const host = Astro.site?.host ?? "";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Link preview card</title>
+  </head>
+  <body>
+    <div class="tile">{initials}</div>
+    <p class="name">{name}</p>
+    <p class="title">{title}</p>
+    <p class="subline">{subline}</p>
+    <p class="host">{host}</p>
+  </body>
+</html>
+
+<style>
+  body {
+    width: 1200px;
+    height: 630px;
+    margin: 0;
+    padding: 96px 96px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #0e0f16;
+    border-left: 12px solid #6d4aff;
+    border-image: linear-gradient(#6d4aff, #00b3d6) 1;
+    font-family: Inter, sans-serif;
+  }
+
+  .tile {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #6d4aff, #0a7f9c);
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .name {
+    margin-top: 72px;
+    color: #eef0f8;
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+
+  .title {
+    margin-top: 14px;
+    font-size: 40px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a593ff, #3cc8e6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subline {
+    margin-top: 16px;
+    color: #9aa0b8;
+    font-size: 28px;
+  }
+
+  .host {
+    margin-top: 56px;
+    color: #a593ff;
+    font-size: 26px;
+    font-weight: 700;
+  }
+</style>

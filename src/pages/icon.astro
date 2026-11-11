@@ -1,0 +1,41 @@
+---
+// Render-only page: scripts/build-assets.mjs screenshots it at 180×180 into dist/apple-touch-icon.png
+// (and resizes that to favicon-32.png), then deletes it from dist/. iOS rounds the corners itself.
+import { getEntry } from "astro:content";
+import "@fontsource/inter/latin-800.css";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+const initials = intro.data.name
+  .split(" ")
+  .slice(0, 2)
+  .map((part) => part[0])
+  .join("");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>App icon</title>
+  </head>
+  <body>{initials}</body>
+</html>
+
+<style>
+  body {
+    width: 180px;
+    height: 180px;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #6d4aff, #0a7f9c);
+    color: #ffffff;
+    font:
+      800 78px/1 Inter,
+      sans-serif;
+  }
+</style>

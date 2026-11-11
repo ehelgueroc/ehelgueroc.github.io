@@ -9,10 +9,9 @@ Requires Node 22.23 or newer; `.nvmrc` pins Node 24 (run `nvm use` in this folde
 ```bash
 npm install
 npm run dev       # http://localhost:4321, reloads as you edit
-npm run build     # type-checks, writes the site to dist/, prints the CV to PDF, then checks the weight budget
+npm run build     # type-checks, writes the site to dist/, renders the CV, preview card and icons, then checks the weight budget
 npm run preview   # serves dist/ locally, to check the production build
 npm run format    # Prettier
-npm run images    # regenerate the link-preview card and favicons in public/ (after changing name/title/subline)
 ```
 
 ## Edit the content
@@ -30,9 +29,17 @@ All copy lives in `src/content/`. Each file is checked against the schema in `sr
 | CV-only extras (education)     | `src/content/education.json`                                                                |
 | Photo                          | Drop `src/assets/photo.jpg` (square, ≥ 800×800). Initials show until then                   |
 
-## The CV
+## Generated assets (CV, preview card, icons)
 
-`npm run build` also produces `dist/esteban-helguero-cardiff-cv.pdf` (served at `/esteban-helguero-cardiff-cv.pdf`). Astro renders the print-only page `src/pages/cv.astro` from the same content as the site, and `scripts/build-cv.mjs` prints it with headless Chrome. There's nothing to update by hand: edit `src/content/` and the CV follows. The build needs Chrome installed (or `CHROME_PATH` set) and fails if the CV can't be made or runs past 2 pages.
+`npm run build` renders these from pages built from `src/content/`, using headless Chrome (`scripts/build-assets.mjs`). None of them are committed, so they can't drift from the content:
+
+| Output                                               | Rendered from                                  |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| `/esteban-helguero-cardiff-cv.pdf` (A4, max 2 pages) | `src/pages/cv.astro` (stays live, `noindex`)   |
+| `/og.png` (1200×630 link-preview card)               | `src/pages/og.astro` (removed after capture)   |
+| `/apple-touch-icon.png`, `/favicon-32.png`           | `src/pages/icon.astro` (removed after capture) |
+
+The font (Inter, via `@fontsource/inter`) is bundled, so the output is the same on a Mac and in CI. The build needs Chrome installed (or `CHROME_PATH` set), and it fails if anything isn't produced or the CV runs past 2 pages. `public/favicon.svg` is the only hand-made icon.
 
 ## How it's organised
 

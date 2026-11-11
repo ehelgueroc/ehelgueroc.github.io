@@ -32,3 +32,5 @@ Which CV does the Contact Section's "Download CV (PDF)" serve, and how is it kep
 - **Files**: `/esteban-helguero-cardiff-cv.pdf`. The `/cv/` page stays reachable with `noindex` and isn't linked from the site.
 - **Failure rule**: if Chrome is missing, the PDF isn't produced, or it runs past 2 pages, **the build fails**. A broken CV button never ships.
 - `src/content/contact.md` sets `cvHref`, which switches on the Contact Section's "Download CV (PDF)" button.
+
+**Update (2026-11-11):** the CV is printed over a local HTTP server by `scripts/build-assets.mjs` (which replaced `build-cv.mjs`), with the bundled Inter font, so the PDF is identical on a Mac and on CI Linux.
