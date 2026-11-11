@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommitsDisabled"
+  ],
+  "timezone": "Atlantic/Canary",
+  "schedule": ["before 9am on monday"],
+  "rangeStrategy": "pin",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on monday"]
+  },
+  "vulnerabilityAlerts": {
+    "schedule": ["at any time"],
+    "labels": ["security"]
+  },
+  "packageRules": [
+    {
+      "description": "Astro and its tooling move together",
+      "groupName": "astro",
+      "matchPackageNames": ["astro", "@astrojs/**", "prettier-plugin-astro"]
+    },
+    {
+      "description": "Dev tooling patches and minors merge themselves once CI is green",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "description": "Pinned GitHub Action digests merge themselves once CI is green",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest", "pinDigest", "patch", "minor"],
+      "automerge": true
+    }
+  ]
+}
