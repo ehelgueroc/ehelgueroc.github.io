@@ -4,7 +4,7 @@ Personal site of Esteban Helguero Cardiff: a single static page built with [Astr
 
 ## Run it
 
-Requires Node 22.12 or newer (`.nvmrc` pins the 22 line).
+Requires Node 22.23 or newer; `.nvmrc` pins Node 24 (run `nvm use` in this folder).
 
 ```bash
 npm install
@@ -61,6 +61,13 @@ Set in `issues/008-set-quality-bar.md`.
   3. With a screen reader (VoiceOver: Cmd+F5), the theme switch says "Switch to dark/light mode".
   4. With reduced motion on (macOS: System Settings › Accessibility › Display › Reduce motion), everything is visible and nothing moves.
   5. With JavaScript disabled, all content is visible and entries still expand.
+
+## Workflow
+
+- `main` is what's live. It's protected: changes arrive through pull requests, and the **CI** workflow (`.github/workflows/ci.yml`) must pass first. CI runs Prettier, the type check, the build, the CV and the weight budget.
+- A merge to `main` deploys through `.github/workflows/deploy.yml`.
+- **Renovate** (`renovate.json`) opens dependency PRs on Monday mornings, Canary time, and security fixes straight away. Dev-tooling patches/minors and GitHub Action digest bumps merge themselves once CI is green; everything else waits for review. Actions are pinned to commit SHAs.
+- **Dependabot alerts** are on and feed Renovate's security PRs. Dependabot's own version-update PRs stay off, to avoid duplicates.
 
 ## Planning
 
