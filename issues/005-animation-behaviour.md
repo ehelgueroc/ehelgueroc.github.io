@@ -8,7 +8,7 @@ parent: 0
 blocked_by: [4]
 ---
 
-Prototype: [`prototype/animation.prototype.html`](../prototype/animation.prototype.html). It opens on the chosen variant, and the others stay switchable via `?variant=`. It's also preserved on the branch `prototype/animation`.
+Prototype: [`prototype/animation.prototype.html`](../prototype/animation.prototype.html). It opens on the chosen variant, and the others stay switchable via `?variant=`.
 
 ## Question
 

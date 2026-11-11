@@ -8,7 +8,7 @@ parent: 0
 blocked_by: []
 ---
 
-Prototype: [`prototype/visual-direction.prototype.html`](../prototype/visual-direction.prototype.html). It opens on the chosen variant, and the others stay switchable via `?variant=`. It's also preserved on the branch `prototype/visual-direction`.
+Prototype: [`prototype/visual-direction.prototype.html`](../prototype/visual-direction.prototype.html). It opens on the chosen variant, and the others stay switchable via `?variant=`.
 
 ## Question
 

@@ -8,7 +8,7 @@ parent: 0
 blocked_by: []
 ---
 
-Prototype: `src/components/PrototypeNewSections.astro` on the local throwaway branch `prototype/new-sections` (never merge). To view it: `git switch prototype/new-sections && npm run dev`, then http://localhost:4321/?variant=A|B|C.
+Prototype: `src/components/PrototypeNewSections.astro` was built on the throwaway branch `prototype/new-sections`, which was deleted on 2026-11-11 after the decision. Its variants are described in the resolution below.
 
 ## Question
 
