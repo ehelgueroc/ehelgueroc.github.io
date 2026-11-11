@@ -1,7 +1,10 @@
 <!--
-  Fades up every element marked data-reveal as it enters the viewport, and counts up numeric
-  Highlights values (data-count). See issues/011-design-new-sections-responsive.md. The Timeline has
-  its own motion and isn't handled here. Nothing runs under reduced motion; without JS, the
+  The page's single scroll-reveal: adds .in to every [data-reveal] element once it enters the viewport,
+  and counts up numeric Highlights values (data-count).
+  - data-reveal (plain): fades up 16 px (global.css), delayed by data-delay ms for staggering.
+    Delays are applied through CSSOM rather than style="" attributes so the CSP needn't allow inline styles.
+  - data-reveal="side": Timeline cards; their slide-from-the-side styles live in Timeline.astro.
+  See issues/005 and issues/011. Nothing runs under reduced motion, and without JS the
   hidden-until-revealed styles never apply (they're gated on the .js class).
 -->
 <script>
@@ -36,8 +39,10 @@
       },
       { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
     );
-    document
-      .querySelectorAll("[data-reveal]")
-      .forEach((el) => observer.observe(el));
+    document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
+      if (el.dataset.delay)
+        el.style.setProperty("--d", `${el.dataset.delay}ms`);
+      observer.observe(el);
+    });
   }
 </script>

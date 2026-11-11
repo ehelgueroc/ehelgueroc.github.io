@@ -10,10 +10,10 @@ const { heading, line, email, linkedin, cvHref } = contact.data;
   <h2 id="contact-title" data-reveal>
     {heading}
   </h2>
-  <p data-reveal style="--d: 70ms">
+  <p data-reveal data-delay="70">
     {line}
   </p>
-  <nav class="links" aria-label="Get in touch" data-reveal style="--d: 140ms">
+  <nav class="links" aria-label="Get in touch" data-reveal data-delay="140">
     <a class="button button--primary" href={`mailto:${email}`}>
       {email}
     </a>

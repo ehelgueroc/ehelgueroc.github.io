@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -10,18 +10,21 @@ const items = await Promise.all(
     Content: (await render(project)).Content,
   })),
 );
+const section = await getEntry("sections", "projects");
+if (!section)
+  throw new Error('src/content/sections.json has no "projects" entry');
 ---
 
 <section class="projects" aria-labelledby="projects-title">
   <h2 id="projects-title" class="section-title" data-reveal>
-    Things I've built
+    {section.data.title}
   </h2>
-  <p class="intro" data-reveal style="--d: 70ms">
-    Platform tools other developers use every day.
+  <p class="intro" data-reveal data-delay="70">
+    {section.data.intro}
   </p>
   <ul class="grid">
     {items.map(({ project, Content }, i) => (
-      <li class="card" data-reveal style={`--d: ${i * 70}ms`}>
+      <li class="card" data-reveal data-delay={i * 70}>
         {project.data.status === "live" ? (
           <span class="pill pill--grad">In production</span>
         ) : (

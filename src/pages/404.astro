@@ -1,0 +1,62 @@
+---
+// GitHub Pages serves dist/404.html for any URL that doesn't exist.
+import { getEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+---
+
+<BaseLayout
+  title={`Page not found · ${intro.data.name}`}
+  description={intro.data.description}
+  noindex
+>
+  <ThemeToggle />
+  <main class="not-found">
+    <p class="code">404</p>
+    <h1>This page doesn't exist</h1>
+    <p>The link may be old or mistyped.</p>
+    <a class="button button--primary" href="/">
+      Go to {intro.data.name}'s page
+    </a>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 92vh;
+    max-width: 560px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .code {
+    margin: 0;
+    font-size: clamp(64px, 16vw, 120px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: var(--title-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(24px, 5vw, 32px);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--muted);
+  }
+</style>

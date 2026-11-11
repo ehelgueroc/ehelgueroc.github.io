@@ -21,7 +21,7 @@ const initials = name
 ---
 
 <header class="hero">
-  <div class="avatar" style="--i: 0">
+  <div class="avatar">
     {photo ? (
       <Image
         src={photo}
@@ -37,20 +37,16 @@ const initials = name
       </span>
     )}
   </div>
-  <h1 style="--i: 1">{name}</h1>
-  <p class="title" style="--i: 2">
-    {title}
-  </p>
-  <p class="subline" style="--i: 3">
-    {subline}
-  </p>
-  <div class="summary" style="--i: 4">
+  <h1>{name}</h1>
+  <p class="title">{title}</p>
+  <p class="subline">{subline}</p>
+  <div class="summary">
     <Summary />
   </div>
-  <p class="meta" style="--i: 5">
+  <p class="meta">
     {location} · {languages}
   </p>
-  <nav class="links" aria-label="Contact" style="--i: 6">
+  <nav class="links" aria-label="Contact">
     {links.map((link, i) => (
       <a
         class:list={["button", { "button--primary": i === 0 }]}
@@ -157,7 +153,25 @@ const initials = name
     }
     .hero > :not(.avatar) {
       animation: fade-up 450ms var(--ease-out) both;
-      animation-delay: calc(150ms + (var(--i) - 1) * 60ms);
+    }
+    /* 150 ms after the photo, then 60 ms apart, in document order. */
+    .hero > :nth-child(2) {
+      animation-delay: 150ms;
+    }
+    .hero > :nth-child(3) {
+      animation-delay: 210ms;
+    }
+    .hero > :nth-child(4) {
+      animation-delay: 270ms;
+    }
+    .hero > :nth-child(5) {
+      animation-delay: 330ms;
+    }
+    .hero > :nth-child(6) {
+      animation-delay: 390ms;
+    }
+    .hero > :nth-child(7) {
+      animation-delay: 450ms;
     }
   }
 </style>

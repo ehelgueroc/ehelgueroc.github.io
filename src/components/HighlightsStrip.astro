@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 
 const highlights = (await getCollection("highlights")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -8,15 +8,18 @@ if (highlights.length > 4)
   throw new Error(
     "The Highlights Strip holds at most 4 facts (src/content/highlights.json)",
   );
+const section = await getEntry("sections", "highlights");
+if (!section)
+  throw new Error('src/content/sections.json has no "highlights" entry');
 ---
 
 <section class="highlights" aria-labelledby="highlights-title">
   <h2 id="highlights-title" class="visually-hidden">
-    Highlights
+    {section.data.title}
   </h2>
   <ul>
     {highlights.map(({ data }, i) => (
-      <li class="card" data-reveal style={`--d: ${i * 70}ms`}>
+      <li class="card" data-reveal data-delay={i * 70}>
         <span class="value" data-count>
           {data.value}
         </span>
