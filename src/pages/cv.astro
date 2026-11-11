@@ -2,6 +2,9 @@
 // Print-only page that scripts/build-cv.mjs turns into the downloadable PDF (issues/010-decide-cv-download.md).
 // Built from the same content as the main page, so the CV can't drift from the site.
 import { getCollection, getEntry, render } from "astro:content";
+// A bundled font, so the PDF looks identical on any machine that builds it (local Mac or CI Linux).
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-700.css";
 
 const intro = await getEntry("intro", "intro");
 if (!intro) throw new Error("src/content/intro.md is missing");
@@ -125,9 +128,7 @@ const contacts = [
     color: #111111;
     background: #ffffff;
     font:
-      9.5pt/1.45 "Helvetica Neue",
-      Helvetica,
-      Arial,
+      9.5pt/1.45 Inter,
       sans-serif;
   }
 
