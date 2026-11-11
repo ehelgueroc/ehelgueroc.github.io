@@ -1,5 +1,5 @@
 # Runs the full build on every pull request without deploying: type check, content schemas,
-# CV generation (headless Chrome) and the page-weight budget. Branch protection on main
+# CV/preview-card/icon generation (headless Chrome), the page-weight budget, then the behaviour tests. Branch protection on main
 # requires this "checks" job to pass, so nothing reaches main (and the live site) unchecked.
 name: CI
 
@@ -26,3 +26,4 @@ jobs:
       - run: npm ci
       - run: npx prettier --check .
       - run: npm run build
+      - run: npm test # Playwright + axe against the built site, using the runner's installed Chrome

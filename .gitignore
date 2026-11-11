@@ -4,3 +4,5 @@ node_modules/
 dist/
 .astro/
 lh-*.json
+playwright-report/
+test-results/

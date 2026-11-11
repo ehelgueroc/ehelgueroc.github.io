@@ -29,3 +29,5 @@ Baseline measured on the live site (2026-11-11, Lighthouse 13.6): desktop 100/10
   - **CI**: `scripts/check-budget.mjs` runs as part of `npm run build` and fails the deploy when a budget is exceeded.
   - **By hand**: Lighthouse (median of 3, mobile) when the design or motion changes. It's not in CI because it's too noisy there.
 - **Manual accessibility checklist** in the README, run before visual changes ship: Tab order with a visible focus ring, Enter/Space toggles entries, the theme switch label is announced, reduced motion leaves everything visible and still, and the page works with JS off.
+
+**Update (2026-11-11):** most of the manual accessibility checklist is now automated in `tests/site.spec.ts` (Playwright + axe, run in CI on every PR). Only the screen-reader listen-through stays manual.

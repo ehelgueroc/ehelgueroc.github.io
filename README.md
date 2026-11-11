@@ -12,6 +12,7 @@ npm run dev       # http://localhost:4321, reloads as you edit
 npm run build     # type-checks, writes the site to dist/, renders the CV, preview card and icons, then checks the weight budget
 npm run preview   # serves dist/ locally, to check the production build
 npm run format    # Prettier
+npm test          # behaviour + accessibility tests against the build (run npm run build first)
 ```
 
 ## Edit the content
@@ -62,12 +63,22 @@ Set in `issues/008-set-quality-bar.md`.
   (Or use Chrome DevTools › Lighthouse › Mobile.)
 
 - **Contrast**: any new colour pair must meet WCAG AA (4.5:1 for body text, 3:1 for large text).
-- **Manual accessibility check** before visual changes ship:
-  1. Tab through the page. Every link, button and Timeline entry gets a visible focus ring, in a sensible order.
-  2. Enter and Space open and close Timeline entries.
-  3. With a screen reader (VoiceOver: Cmd+F5), the theme switch says "Switch to dark/light mode".
-  4. With reduced motion on (macOS: System Settings › Accessibility › Display › Reduce motion), everything is visible and nothing moves.
-  5. With JavaScript disabled, all content is visible and entries still expand.
+- **Behaviour tests** (`tests/site.spec.ts`, run in CI on every PR) replace most of the old manual checklist:
+  - no axe violations, in light and dark
+  - no console errors or CSP violations
+  - the theme switch toggles and is remembered
+  - Enter/Space open and close Timeline entries
+  - Highlights count up to their real values
+  - reduced motion leaves everything visible
+  - without JS, content is visible and entries expand
+  - the CV link serves a PDF
+  - unknown URLs get the 404 page
+- **Still by hand**, before big visual changes: listen to the page once with a screen reader (VoiceOver: Cmd+F5). Tests can't judge whether it _sounds_ right.
+
+## Security
+
+- A **Content Security Policy** is set as a `<meta>` tag (`security.csp` in `astro.config.mjs`), because GitHub Pages can't send headers. Astro hashes its own scripts and styles. Don't add inline `style="…"` attributes or third-party scripts: the CSP blocks them, and the "CSP violations" test fails.
+- Dependencies: Renovate PRs plus Dependabot alerts (see Workflow).
 
 ## Workflow
 
@@ -75,6 +86,10 @@ Set in `issues/008-set-quality-bar.md`.
 - A merge to `main` deploys through `.github/workflows/deploy.yml`.
 - **Renovate** (`renovate.json`) opens dependency PRs on Monday mornings, Canary time, and security fixes straight away. Dev-tooling patches/minors and GitHub Action digest bumps merge themselves once CI is green; everything else waits for review. Actions are pinned to commit SHAs.
 - **Dependabot alerts** are on and feed Renovate's security PRs. Dependabot's own version-update PRs stay off, to avoid duplicates.
+
+## Licence
+
+Code is MIT. The personal content (`src/content/`, photos, the generated CV/card/icons, `issues/`) is all rights reserved. See `LICENSE`.
 
 ## Planning
 
