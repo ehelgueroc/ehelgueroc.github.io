@@ -1,6 +1,9 @@
 ---
 import { getEntry } from "astro:content";
 
+const section = await getEntry("sections", "looking-for");
+if (!section)
+  throw new Error('src/content/sections.json has no "looking-for" entry');
 const lookingFor = await getEntry("lookingFor", "looking-for");
 if (!lookingFor) throw new Error("src/content/looking-for.md is missing");
 const { visible, badge, role, setup, timezone, interests } = lookingFor.data;
@@ -20,7 +23,7 @@ const facts = [
     data-reveal
   >
     <div class="head">
-      <h2 id="looking-for-title">What I'm looking for</h2>
+      <h2 id="looking-for-title">{section.data.title}</h2>
       <span class="pill pill--grad">{badge}</span>
     </div>
     <dl>

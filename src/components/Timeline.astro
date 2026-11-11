@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 
 const entries = (await getCollection("timeline")).sort((a, b) =>
   b.data.start.localeCompare(a.data.start),
@@ -13,17 +13,23 @@ const items = await Promise.all(
 
 const years = (start: string, end: string | null) =>
   `${start.slice(0, 4)} – ${end ? end.slice(0, 4) : "Present"}`;
+const section = await getEntry("sections", "career");
+if (!section)
+  throw new Error('src/content/sections.json has no "career" entry');
 ---
 
 <section class="career" aria-labelledby="career-title">
   <h2 id="career-title" class="section-title">
-    Career
+    {section.data.title}
   </h2>
   <div class="tl">
     <span class="tl-line" aria-hidden="true"></span>
     <ol>
       {items.map(({ entry, Content }, i) => (
-        <li class:list={["item", i % 2 === 0 ? "left" : "right"]}>
+        <li
+          class:list={["item", i % 2 === 0 ? "left" : "right"]}
+          data-reveal="side"
+        >
           <span class="dot" aria-hidden="true" />
           <details class="card">
             <summary>
@@ -72,25 +78,11 @@ const years = (start: string, end: string | null) =>
 <script>
   // Motion B (issues/005-animation-behaviour.md). Nothing here runs under reduced motion:
   // entries are then visible from the start, the line is fully drawn and <details> opens instantly.
+  // Revealing the cards themselves is RevealOnScroll's job (data-reveal="side").
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const timeline = document.querySelector<HTMLElement>(".tl");
 
   if (!reduced && timeline) {
-    // Cards slide in from their side once, as they enter the viewport.
-    const observer = new IntersectionObserver(
-      (records) => {
-        for (const record of records) {
-          if (!record.isIntersecting) continue;
-          record.target.classList.add("in");
-          observer.unobserve(record.target);
-        }
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.1 },
-    );
-    timeline
-      .querySelectorAll(".item")
-      .forEach((item) => observer.observe(item));
-
     // The centre line draws with scroll progress, updated at most once per frame.
     let queued = false;
     const drawLine = () => {

@@ -1,0 +1,9 @@
+{
+  "highlights": { "title": "Highlights" },
+  "career": { "title": "Career" },
+  "projects": {
+    "title": "Things I've built",
+    "intro": "Platform tools other developers use every day."
+  },
+  "looking-for": { "title": "What I'm looking for" }
+}

@@ -195,13 +195,13 @@ a {
 /* Sections after the Timeline fade up once as they scroll in, staggered by --d
    (issues/011-design-new-sections-responsive.md; script in RevealOnScroll.astro). */
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] {
+  .js [data-reveal=""] {
     transition:
       opacity 400ms ease-out,
       transform 400ms var(--ease-out);
     transition-delay: var(--d, 0ms);
   }
-  .js [data-reveal]:not(.in) {
+  .js [data-reveal=""]:not(.in) {
     opacity: 0;
     transform: translateY(16px);
   }

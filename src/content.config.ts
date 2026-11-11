@@ -79,6 +79,16 @@ const contact = defineCollection({
   }),
 });
 
+// Section headings (and the projects intro line). Small UI labels such as "Details" or "In production" stay
+// in their components: they're interface text, not copy about the owner.
+const sections = defineCollection({
+  loader: file("./src/content/sections.json"),
+  schema: z.object({
+    title: z.string(),
+    intro: z.string().optional(),
+  }),
+});
+
 // Shown on the CV only, never on the page (issues/010-decide-cv-download.md).
 const education = defineCollection({
   loader: file("./src/content/education.json"),
@@ -98,4 +108,5 @@ export const collections = {
   lookingFor,
   contact,
   education,
+  sections,
 };
