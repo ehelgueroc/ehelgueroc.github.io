@@ -3,3 +3,4 @@ Profile.pdf
 node_modules/
 dist/
 .astro/
+lh-*.json

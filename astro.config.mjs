@@ -5,4 +5,6 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://ehelgueroc.github.io",
   output: "static",
+  // Inline the small stylesheet to avoid a render-blocking request (Set the performance and accessibility bar).
+  build: { inlineStylesheets: "always" },
 });
