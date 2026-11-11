@@ -3,3 +3,5 @@ dist/
 issues/
 prototype/
 package-lock.json
+playwright-report/
+test-results/
