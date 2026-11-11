@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && node scripts/check-budget.mjs",
+    "build": "astro check && astro build && node scripts/build-cv.mjs && node scripts/check-budget.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "format": "prettier --write .",

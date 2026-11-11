@@ -21,9 +21,12 @@ async function files(dir) {
 
 const all = await files(dist);
 
-// Text the page loads: HTML plus any emitted CSS/JS, measured gzipped like the browser receives them.
+// Text the page loads: its HTML plus any emitted CSS/JS, measured gzipped like the browser receives them.
+// The print-only /cv/ page isn't part of the page a visitor loads, so it's left out.
 let text = 0;
-for (const file of all.filter((f) => /\.(html|css|js)$/.test(f))) {
+const pageText = (f) =>
+  f === join(dist, "index.html") || /\/_astro\/[^/]+\.(css|js)$/.test(f);
+for (const file of all.filter(pageText)) {
   text += gzipSync(await readFile(file)).length;
 }
 

@@ -19,3 +19,5 @@
 **Looking-For Card**: the section stating what kind of role the owner wants next (role, work setup, time zone, availability). Shown only while the owner is looking.
 
 **Contact Section**: the end of the page, with the call to action, contact links, the CV download, and the footer.
+
+**CV**: the downloadable PDF built from the same content as the page (Intro, Timeline, languages) plus education. It is never hand-edited, so it can't disagree with the site.

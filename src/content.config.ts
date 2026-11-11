@@ -79,6 +79,17 @@ const contact = defineCollection({
   }),
 });
 
+// Shown on the CV only, never on the page (issues/010-decide-cv-download.md).
+const education = defineCollection({
+  loader: file("./src/content/education.json"),
+  schema: z.object({
+    order: z.number().int(),
+    qualification: z.string(),
+    institution: z.string(),
+    years: z.string(),
+  }),
+});
+
 export const collections = {
   intro,
   timeline,
@@ -86,4 +97,5 @@ export const collections = {
   projects,
   lookingFor,
   contact,
+  education,
 };

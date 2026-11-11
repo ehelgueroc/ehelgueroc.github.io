@@ -9,7 +9,7 @@ Requires Node 22.12 or newer (`.nvmrc` pins the 22 line).
 ```bash
 npm install
 npm run dev       # http://localhost:4321, reloads as you edit
-npm run build     # type-checks content + code, writes the static site to dist/, then checks the weight budget
+npm run build     # type-checks, writes the site to dist/, prints the CV to PDF, then checks the weight budget
 npm run preview   # serves dist/ locally, to check the production build
 npm run format    # Prettier
 npm run images    # regenerate the link-preview card and favicons in public/ (after changing name/title/subline)
@@ -27,7 +27,12 @@ All copy lives in `src/content/`. Each file is checked against the schema in `sr
 | Things I've built              | `src/content/projects/*.md`                                                                 |
 | What I'm looking for           | `src/content/looking-for.md` (set `visible: false` to hide it)                              |
 | Contact + footer               | `src/content/contact.md` (uncomment `cvHref` once the CV exists)                            |
+| CV-only extras (education)     | `src/content/education.json`                                                                |
 | Photo                          | Drop `src/assets/photo.jpg` (square, ≥ 800×800). Initials show until then                   |
+
+## The CV
+
+`npm run build` also produces `dist/esteban-helguero-cardiff-cv.pdf` (served at `/esteban-helguero-cardiff-cv.pdf`). Astro renders the print-only page `src/pages/cv.astro` from the same content as the site, and `scripts/build-cv.mjs` prints it with headless Chrome. There's nothing to update by hand: edit `src/content/` and the CV follows. The build needs Chrome installed (or `CHROME_PATH` set) and fails if the CV can't be made or runs past 2 pages.
 
 ## How it's organised
 

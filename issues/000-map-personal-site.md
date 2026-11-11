@@ -33,6 +33,7 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - [Choose the hosting platform](006-choose-hosting.md): GitHub Pages at https://ehelgueroc.github.io from the public repo `ehelgueroc.github.io`, with the Astro GitHub Action deploying every push to `main`.
 - [Define the page metadata](007-define-page-metadata.md): name + title as `<title>`, a 149-character description, canonical URL, a designed 1200×630 preview card, an "EH" gradient favicon, theme-color per theme, and a JSON-LD Person block. No sitemap.
 - [Set the performance and accessibility bar](008-set-quality-bar.md): Lighthouse A11y/BP/SEO 100 and mobile Perf ≥ 95 (median of 3), ≤ 30 KB text / 60 KB photo / 100 KB page enforced in CI, WCAG AA contrast, inlined CSS, and a manual a11y checklist.
+- [Decide the CV download](010-decide-cv-download.md): an English A4 CV (max 2 pages) generated on every build from `src/content/` via a `/cv/` page and headless Chrome. No phone or address, education on the CV only, and the build fails if it can't be made.
 
 ## Not yet specified
 

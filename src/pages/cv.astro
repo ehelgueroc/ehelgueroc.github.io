@@ -1,0 +1,222 @@
+---
+// Print-only page that scripts/build-cv.mjs turns into the downloadable PDF (issues/010-decide-cv-download.md).
+// Built from the same content as the main page, so the CV can't drift from the site.
+import { getCollection, getEntry, render } from "astro:content";
+
+const intro = await getEntry("intro", "intro");
+if (!intro) throw new Error("src/content/intro.md is missing");
+const { Content: Summary } = await render(intro);
+const { name, title, location, languages, links } = intro.data;
+
+const timeline = (await getCollection("timeline")).sort((a, b) =>
+  b.data.start.localeCompare(a.data.start),
+);
+const roles = await Promise.all(
+  timeline.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })),
+);
+const education = (await getCollection("education")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const monthYear = (value: string) =>
+  new Date(`${value}-01T00:00:00Z`).toLocaleDateString("en-GB", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+// A Period Entry spans years, so it shows years only; a role shows months.
+const dates = (kind: string, start: string, end: string | null) =>
+  kind === "period"
+    ? `${start.slice(0, 4)} – ${end?.slice(0, 4) ?? "Present"}`
+    : `${monthYear(start)} – ${end ? monthYear(end) : "Present"}`;
+
+const website = Astro.site?.href.replace(/^https?:\/\/|\/$/g, "") ?? "";
+const contacts = [
+  ...links.map((link) => ({
+    label: link.href.replace(/^mailto:|^https?:\/\/(www\.)?|\/$/g, ""),
+    href: link.href,
+  })),
+  { label: website, href: Astro.site?.href ?? "" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{name} · CV</title>
+  </head>
+  <body>
+    <header>
+      <h1>{name}</h1>
+      <p class="title">{title}</p>
+      <p class="meta">{location}</p>
+      <p class="meta contacts">
+        {contacts.map((contact, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true"> · </span>}
+            <a href={contact.href}>{contact.label}</a>
+          </>
+        ))}
+      </p>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <div class="summary">
+        <Summary />
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      {roles.map(({ entry, Content }) => (
+        <article>
+          <div class="role-head">
+            <h3>
+              {entry.data.title}
+              <span class="company">· {entry.data.company}</span>
+            </h3>
+            <span class="dates">
+              {dates(entry.data.kind, entry.data.start, entry.data.end)}
+            </span>
+          </div>
+          <p class="location">
+            {entry.data.location} · {entry.data.tags.join(", ")}
+          </p>
+          <Content />
+        </article>
+      ))}
+    </section>
+
+    <section class="two-col">
+      <div>
+        <h2>Languages</h2>
+        <p>{languages}</p>
+      </div>
+      <div>
+        <h2>Education</h2>
+        {education.map(({ data }) => (
+          <p>
+            <strong>{data.qualification}</strong>
+            <br />
+            {data.institution} · {data.years}
+          </p>
+        ))}
+      </div>
+    </section>
+  </body>
+</html>
+
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+
+  body {
+    max-width: 180mm;
+    margin: 0 auto;
+    color: #111111;
+    background: #ffffff;
+    font:
+      9.5pt/1.45 "Helvetica Neue",
+      Helvetica,
+      Arial,
+      sans-serif;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 22pt;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .title {
+    margin: 2pt 0 4pt;
+    font-size: 12pt;
+    font-weight: 700;
+  }
+
+  .meta {
+    margin: 0;
+    color: #444444;
+  }
+
+  h2 {
+    margin: 14pt 0 6pt;
+    padding-bottom: 2pt;
+    border-bottom: 0.75pt solid #d9d9e3;
+    color: #5b38f0;
+    font-size: 10.5pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .summary :global(p) {
+    margin: 0;
+  }
+
+  article {
+    margin-bottom: 9pt;
+    break-inside: avoid;
+  }
+
+  .role-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12pt;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 10.5pt;
+  }
+
+  .company {
+    font-weight: 400;
+  }
+
+  .dates {
+    flex: none;
+    color: #444444;
+  }
+
+  .location {
+    margin: 1pt 0 3pt;
+    color: #555555;
+    font-size: 8.5pt;
+  }
+
+  article :global(ul) {
+    margin: 0;
+    padding-left: 13pt;
+  }
+
+  article :global(li) {
+    margin: 1pt 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 16pt;
+    break-inside: avoid;
+  }
+
+  .two-col p {
+    margin: 0;
+  }
+</style>
