@@ -7,9 +7,13 @@ const { heading, line, email, linkedin, cvHref } = contact.data;
 ---
 
 <section class="contact" aria-labelledby="contact-title">
-  <h2 id="contact-title">{heading}</h2>
-  <p>{line}</p>
-  <nav class="links" aria-label="Get in touch">
+  <h2 id="contact-title" data-reveal>
+    {heading}
+  </h2>
+  <p data-reveal style="--d: 70ms">
+    {line}
+  </p>
+  <nav class="links" aria-label="Get in touch" data-reveal style="--d: 140ms">
     <a class="button button--primary" href={`mailto:${email}`}>
       {email}
     </a>

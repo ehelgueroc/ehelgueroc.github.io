@@ -2,10 +2,12 @@
 id: 0
 title: "Map: personal site MVP"
 labels: [wayfinder:map]
-status: open
+status: closed
 ---
 
 ## Destination
+
+> **Reached on 2026-11-11.** Every ticket is closed, and the spec was built along the way. It's live at https://ehelgueroc.github.io from `main`. Future changes (photo, wording, items under Out of scope) are ordinary edits or new efforts, not part of this map.
 
 A **build-ready spec** for a single-page, English personal site aimed at recruiters and hiring managers: an **Intro**, a **Highlights Strip**, a scroll-revealed, click-to-expand **Timeline** of roles, **Featured Projects**, a **Looking-For Card**, and a **Contact Section** with a CV download, with simple, fast animations. Content, stack, hosting, visual direction and animation behaviour are all decided. A separate session then builds it.
 
@@ -16,7 +18,7 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - Standing preferences: MVP. Be as simple as possible, use a fast page with minimal JS, and keep animations simple and quick. English only.
 - Settled while charting: hosting starts on a free subdomain. There's no separate skills section, because the Timeline carries the tech.
 - **Scope widened on 2026-11-10** at the owner's request. In page order, the sections are: Intro → Highlights Strip → Timeline → Featured Projects → Looking-For Card → Contact Section (with CV download and footer). The ideas canvas, https://claude.ai/artifact/K4Q1uykmnXtJQouQL7tUJQ, shows rough versions of the new sections; its Recommendations board was not chosen. The main design canvas is https://claude.ai/artifact/PN557G9QQeGsAqhmCJyP2J.
-- **Build started early on 2026-11-10**, at the owner's request, on branch `build/astro-site` (Astro 6.4.8, chosen because Astro 7 needs Node ≥ 22.23 and the owner has 22.14). The build already contains every closed decision. Open tickets land as follow-up changes, and the build marks their spots as provisional: the page `<title>`/description, the CV button (hidden until `cvHref` is set), the new sections' mobile reflow and motion, and deploy.
+- **Build started early on 2026-11-10**, at the owner's request, on branch `build/astro-site` (Astro 6.4.8, chosen because Astro 7 needs Node ≥ 22.23 and the owner has 22.14). The build already contains every closed decision. Each later ticket landed as a follow-up change on its own branch, merged into `main`. Nothing provisional remains.
 - Vocabulary: see `GLOSSARY.md`.
 - Skills: grilling tickets use `grilling` + `domain-modeling`, and prototype tickets use `prototype`.
 
@@ -34,10 +36,11 @@ A **build-ready spec** for a single-page, English personal site aimed at recruit
 - [Define the page metadata](007-define-page-metadata.md): name + title as `<title>`, a 149-character description, canonical URL, a designed 1200×630 preview card, an "EH" gradient favicon, theme-color per theme, and a JSON-LD Person block. No sitemap.
 - [Set the performance and accessibility bar](008-set-quality-bar.md): Lighthouse A11y/BP/SEO 100 and mobile Perf ≥ 95 (median of 3), ≤ 30 KB text / 60 KB photo / 100 KB page enforced in CI, WCAG AA contrast, inlined CSS, and a manual a11y checklist.
 - [Decide the CV download](010-decide-cv-download.md): an English A4 CV (max 2 pages) generated on every build from `src/content/` via a `/cv/` page and headless Chrome. No phone or address, education on the CV only, and the build fails if it can't be made.
+- [Design the new sections for light mode, mobile and motion](011-design-new-sections-responsive.md): variant B "Lively": shared tokens cover light mode, stacked layouts on phones, sections fade up 16 px with a 70 ms stagger, and Highlights numbers count up. Off under reduced motion.
 
 ## Not yet specified
 
-_Nothing right now. Every remaining question is an open ticket._
+_Nothing. The map is complete._
 
 ## Out of scope
 

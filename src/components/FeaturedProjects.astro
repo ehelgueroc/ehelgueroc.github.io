@@ -13,13 +13,15 @@ const items = await Promise.all(
 ---
 
 <section class="projects" aria-labelledby="projects-title">
-  <h2 id="projects-title" class="section-title">
+  <h2 id="projects-title" class="section-title" data-reveal>
     Things I've built
   </h2>
-  <p class="intro">Platform tools other developers use every day.</p>
+  <p class="intro" data-reveal style="--d: 70ms">
+    Platform tools other developers use every day.
+  </p>
   <ul class="grid">
-    {items.map(({ project, Content }) => (
-      <li class="card">
+    {items.map(({ project, Content }, i) => (
+      <li class="card" data-reveal style={`--d: ${i * 70}ms`}>
         {project.data.status === "live" ? (
           <span class="pill pill--grad">In production</span>
         ) : (

@@ -15,9 +15,11 @@ if (highlights.length > 4)
     Highlights
   </h2>
   <ul>
-    {highlights.map(({ data }) => (
-      <li class="card">
-        <span class="value">{data.value}</span>
+    {highlights.map(({ data }, i) => (
+      <li class="card" data-reveal style={`--d: ${i * 70}ms`}>
+        <span class="value" data-count>
+          {data.value}
+        </span>
         <span class="label">{data.label}</span>
       </li>
     ))}

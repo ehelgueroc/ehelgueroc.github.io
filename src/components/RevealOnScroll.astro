@@ -1,0 +1,43 @@
+<!--
+  Fades up every element marked data-reveal as it enters the viewport, and counts up numeric
+  Highlights values (data-count). See issues/011-design-new-sections-responsive.md. The Timeline has
+  its own motion and isn't handled here. Nothing runs under reduced motion; without JS, the
+  hidden-until-revealed styles never apply (they're gated on the .js class).
+-->
+<script>
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // "15+" → 0…15+ over 700 ms. Values that aren't a plain number (e.g. "Monthly") stay as they are.
+  const countUp = (el: HTMLElement) => {
+    const match = el.textContent?.trim().match(/^(\d+)(\+?)$/);
+    if (!match) return;
+    const target = Number(match[1]);
+    const suffix = match[2];
+    const started = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - started) / 700);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = `${Math.round(target * eased)}${suffix}`;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if (!reduced) {
+    const observer = new IntersectionObserver(
+      (records) => {
+        for (const record of records) {
+          if (!record.isIntersecting) continue;
+          const el = record.target as HTMLElement;
+          el.classList.add("in");
+          el.querySelectorAll<HTMLElement>("[data-count]").forEach(countUp);
+          observer.unobserve(el);
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+    );
+    document
+      .querySelectorAll("[data-reveal]")
+      .forEach((el) => observer.observe(el));
+  }
+</script>
