@@ -1,5 +1,5 @@
 ---
-import { getEntry } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import Hero from "../components/Hero.astro";
@@ -13,12 +13,28 @@ import Footer from "../components/Footer.astro";
 const intro = await getEntry("intro", "intro");
 if (!intro) throw new Error("src/content/intro.md is missing");
 
-// Provisional <title> and description; "Define the page metadata" settles the final <head>.
-const title = `${intro.data.name} · ${intro.data.title}`;
-const description = `${intro.data.title}. ${intro.data.subline}.`;
+// <head> metadata, as settled in issues/007-define-page-metadata.md.
+const { name, title: jobTitle, description, location, links } = intro.data;
+const title = `${name} · ${jobTitle}`;
+const currentRole = (await getCollection("timeline")).find(
+  (entry) => entry.data.end === null,
+);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name,
+  jobTitle,
+  url: Astro.site?.href,
+  homeLocation: { "@type": "Place", name: location.split(" · ")[0] },
+  sameAs: links
+    .map((link) => link.href)
+    .filter((href) => href.startsWith("http")),
+  knowsAbout: currentRole?.data.tags ?? [],
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <ThemeToggle />
   <Hero />
   <main>

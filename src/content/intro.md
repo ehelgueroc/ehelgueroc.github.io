@@ -2,6 +2,8 @@
 name: Esteban Helguero Cardiff
 title: Senior Backend Engineer
 subline: Node.js · TypeScript · AWS · Platform & DevOps tooling
+# Search-result and link-preview text; keep it under ~155 characters.
+description: "Senior Backend Engineer with 15+ years of experience: Node.js and TypeScript on AWS, platform tooling, Kafka and Terraform. Remote from Gran Canaria."
 location: Gran Canaria, Spain · Remote
 languages: Spanish (native) · English (professional) · German (basic)
 links:

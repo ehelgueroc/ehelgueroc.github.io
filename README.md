@@ -12,6 +12,7 @@ npm run dev       # http://localhost:4321, reloads as you edit
 npm run build     # type-checks content + code, then writes the static site to dist/
 npm run preview   # serves dist/ locally, to check the production build
 npm run format    # Prettier
+npm run images    # regenerate the link-preview card and favicons in public/ (after changing name/title/subline)
 ```
 
 ## Edit the content

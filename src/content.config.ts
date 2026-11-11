@@ -14,6 +14,7 @@ const intro = defineCollection({
     name: z.string(),
     title: z.string(),
     subline: z.string(),
+    description: z.string().max(160),
     location: z.string(),
     languages: z.string(),
     links: z.array(z.object({ label: z.string(), href: z.string() })).min(1),
