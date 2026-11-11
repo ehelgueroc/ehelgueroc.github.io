@@ -84,7 +84,7 @@ Set in `issues/008-set-quality-bar.md`.
 
 - `main` is what's live. It's protected: changes arrive through pull requests, and the **CI** workflow (`.github/workflows/ci.yml`) must pass first. CI runs Prettier, the type check, the build, the CV and the weight budget.
 - A merge to `main` deploys through `.github/workflows/deploy.yml`.
-- **Renovate** (`renovate.json`) opens dependency PRs on Monday mornings, Canary time, and security fixes straight away. Dev-tooling patches/minors and GitHub Action digest bumps merge themselves once CI is green; everything else waits for review. Actions are pinned to commit SHAs.
+- **Renovate** runs as a GitHub Action every 6 hours (`.github/workflows/renovate.yml`, self-hosted, using the `RENOVATE_TOKEN` secret). With `renovate.json`, it opens dependency PRs on Monday mornings, Canary time, and security fixes straight away. Dev-tooling patches/minors and GitHub Action digest bumps merge themselves once CI is green; everything else waits for review. Actions are pinned to commit SHAs.
 - **Dependabot alerts** are on and feed Renovate's security PRs. Dependabot's own version-update PRs stay off, to avoid duplicates.
 
 ## Licence
